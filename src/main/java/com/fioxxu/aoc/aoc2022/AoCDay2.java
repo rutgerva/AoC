@@ -7,7 +7,6 @@ import java.io.IOException;
 
 public class AoCDay2 {
     private static BufferedReader bufferedReader;
-//    private static final String INPUT_FILE = "test1.txt";
     private static final String INPUT_FILE = "aoc_day2_input.txt";
     private static Integer points = 0;
 
