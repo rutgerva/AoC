@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 
 import static java.lang.Boolean.FALSE;
 import static java.lang.Boolean.TRUE;
@@ -13,21 +14,30 @@ public class AoCDay1 {
     private static BufferedReader bufferedReader;
     private static Boolean fileEnded = FALSE;
     private static Integer currentHighestCalories = 0;
+    private static Integer topThreeSumCalories;
+    private static final ArrayList<Integer> highestCaloriesCarried = new ArrayList<>();
     private static final String INPUT_FILE = "aoc_day1_input.txt";
 
     public static void main(String... args) {
+        compute();
+        System.out.println("The Elf that holds the most calories is holding: " + currentHighestCalories + " calories!");
+        System.out.println("The sum of the top 3 calories is: " + topThreeSumCalories + " calories!");
+    }
+
+    private static void compute() {
         try {
             bufferedReader = new BufferedReader(new InputStreamReader(getFileFromResources()));
             while (fileEnded.equals(FALSE)) {
                 Integer result = readElfsCalories();
-                currentHighestCalories = result > currentHighestCalories ? result : currentHighestCalories;
+                currentHighestCalories = currentHighestCalories < result ? result : currentHighestCalories;
+                updateTopCaloriesArray(result);
             }
             bufferedReader.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-        System.out.println("The Elf that holds the most calories is holding: " + currentHighestCalories + " calories!");
+        topThreeSumCalories = highestCaloriesCarried.stream().mapToInt(i -> i)
+                .sum();
     }
 
     private static Integer readElfsCalories() throws IOException {
@@ -49,4 +59,20 @@ public class AoCDay1 {
         return classLoader.getResourceAsStream(INPUT_FILE);
     }
 
+    private static void updateTopCaloriesArray(Integer replacementCandidate) {
+        if (highestCaloriesCarried.size() != 3) {
+            highestCaloriesCarried.add(replacementCandidate);
+        } else {
+            int indexToReplace = -1;
+            int currentCompare = replacementCandidate;
+            for (int i = 0; i < highestCaloriesCarried.size(); i++) {
+                if (highestCaloriesCarried.get(i) < currentCompare) {
+                    indexToReplace = i;
+                    currentCompare = highestCaloriesCarried.get(i);
+                }
+            }
+            if (-1 != indexToReplace)
+                highestCaloriesCarried.set(indexToReplace, replacementCandidate);
+        }
+    }
 }
