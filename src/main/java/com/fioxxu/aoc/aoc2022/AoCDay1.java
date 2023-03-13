@@ -1,9 +1,9 @@
 package com.fioxxu.aoc.aoc2022;
 
+import com.fioxxu.aoc.aoc2022.utils.BufferedReaderHelper;
+
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
 
 import static java.lang.Boolean.FALSE;
@@ -26,7 +26,7 @@ public class AoCDay1 {
 
     private static void compute() {
         try {
-            bufferedReader = new BufferedReader(new InputStreamReader(getFileFromResources()));
+            bufferedReader = BufferedReaderHelper.build(INPUT_FILE);
             while (fileEnded.equals(FALSE)) {
                 Integer result = readElfsCalories();
                 currentHighestCalories = currentHighestCalories < result ? result : currentHighestCalories;
@@ -52,11 +52,6 @@ public class AoCDay1 {
         }
         fileEnded = TRUE;
         return result;
-    }
-
-    private static InputStream getFileFromResources() {
-        ClassLoader classLoader = AoCDay1.class.getClassLoader();
-        return classLoader.getResourceAsStream(INPUT_FILE);
     }
 
     private static void updateTopCaloriesArray(Integer replacementCandidate) {
